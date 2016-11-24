@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="bin\www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" path-to-js-file="bin/www" application-parameters="--bounds=7000:7010 -p=127.0.0.1:8080 -c=/test" working-dir="$PROJECT_DIR$">
+    <envs>
+      <env name="DEBUG" value="converter:*" />
+      <env name="HTTP_PROXY" value="127.0.0.1" />
+      <env name="HTTPS_PROXY" value="127.0.0.1" />
+      <env name="PORT" value="7000" />
+    </envs>
+    <browser url="http://localhost:3000/" />
+    <profiling v8-profiler-path="" />
+    <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSProfilingRunConfigurationExtension">
+      <profiling v8-profiler-path="" />
+    </EXTENSION>
+    <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
+      <browser url="http://localhost:3000/" />
+    </EXTENSION>
+    <method />
+  </configuration>
+</component>
