@@ -1,9 +1,10 @@
-const express = require('express');
-const path = require('path');
-const favicon = require('serve-favicon');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var fs = require('fs');
 
 // templates
 var index = require('./routes/index');
@@ -12,24 +13,23 @@ var users = require('./routes/users');
 // arguments parser
 var options = require("yargs")
     .usage("Usage: $0 [--proxy \"proxy address:port\"]")
-    .option("b", {alias: "bounds", describe: "PhantomJS port bounds in format 'bottom:top'", type: "string"})
     .option("p", {alias: "proxy", describe: "Proxy address:port", type: "string"})
     .option("c", {alias: "context", describe: "Web app context to listen on, /gen by default", type: "string"})
     .help("?")
     .alias("?", "help")
     .example("$0 ", "Running app simpliest way")
-    .example("$0 --browserPorts=7000:7010", "Running app with browser's port bounds")
     .example("$0 --proxy=10.10.0.120:8080", "Running app using proxy 10.10.0.120:8080")
     .epilog("Copyright 2016 CardsPro.")
     .argv;
+
+
+const destDir = "./reports";
 
 // html-2-pdf converter conversion config
 var conversion = require("phantom-html-to-pdf")({
     numberOfWorkers: 2,
     timeout: 10000,
-    tmpDir: "./reports",
-    portLeftBoundary: options.bounds.split(':')[0] || null,
-    portRightBoundary: options.bounds.split(':')[1] || null,
+    tmpDir: destDir,
     host: '127.0.0.1',
     strategy: "dedicated-process",
     maxLogEntrySize: 1000,
@@ -52,6 +52,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+
+// creating reports destination dir, if not exists
+if (!fs.existsSync(destDir)) {
+    fs.mkdirSync(destDir);
+}
 
 // converter logic
 app.get(options.context || '/gen', function (req, res) {
